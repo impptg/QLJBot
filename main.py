@@ -10,16 +10,17 @@ login_url = 'http://gba.bjtu.edu.cn/login?redirect=%2Factivity%2Flist'
 
 mail_server = 'smtp.qq.com'
 mail_from = '1493173244@qq.com'
-mail_pswd = 'xxxx'
+mail_pswd = ''
 mail_to = '21125166@bjtu.edu.cn'
 
 # 正文
-msg = MIMEText('害嗨嗨，有新的会议咯，快抢','plain','utf-8')
+msg = MIMEText('害嗨嗨，有新的会议咯，快抢', 'plain', 'utf-8')
 msg['From'] = Header('QLJBot')
 msg['To'] = Header('21125166')
-msg['Subject'] = Header('新会议','utf-8')
+msg['Subject'] = Header('新会议', 'utf-8')
 
 cntPre = 0
+
 
 def sendMail():
     try:
@@ -42,6 +43,7 @@ def sendMail():
         # 关闭
         smtpobj.quit()
 
+
 def refreshCount():
     option = webdriver.ChromeOptions()
     option.add_argument('disable-infobars')
@@ -62,16 +64,21 @@ def refreshCount():
 
     sleep(2)
     countInfo = browser.find_element_by_class_name('el-pagination__total').text
-    # countNum = string.atoi(''.join(x for x in countInfo if x.isdigit()))
-    return 1111
+    countNum = string.atoi(''.join(x for x in countInfo if x.isdigit()))
+    return countNum
+
 
 def job():
     cntNow = refreshCount()
-    # if cntNow > cntPre:
+    if cntNow > cntPre:
+        sendMail()
+
 
 if __name__ == '__main__':
+    # 获取初始 Cnt
     cntPre = refreshCount()
-    sendMail()
-    # schedule.every(5).seconds.do(job)
-    # while True:
-    #     schedule.run_pending()
+
+    # 定义循环任务
+    schedule.every(5).seconds.do(job)
+    while True:
+        schedule.run_pending()
