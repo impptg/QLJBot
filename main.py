@@ -1,11 +1,11 @@
 from selenium import webdriver
 from time import sleep
-import string
 import smtplib
 from email.mime.text import MIMEText
 from email.header import Header
 import schedule
 import config
+import network
 
 login_url = 'http://gba.bjtu.edu.cn/login?redirect=%2Factivity%2Flist'
 
@@ -19,6 +19,8 @@ cntPre = 0
 
 
 def sendMail():
+    # 登陆校园网
+    network.networkConnect()
     try:
         # 连接
         smtpobj = smtplib.SMTP_SSL(config.mail_server, config.mail_port)
@@ -65,9 +67,9 @@ def refreshCount():
 
 
 def refreshJob():
-    print("refreshJob")
     cntNow = refreshCount()
     cntPre = cntNow
+    print("refreshJob now:" + cntNow + "pre:" + cntPre)
     if cntNow > cntPre:
         sendMail()
 
@@ -83,6 +85,7 @@ if __name__ == '__main__':
 
     # 2 小时刷新一次
     schedule.every(1).hours.do(refreshJob)
+
     # 每天 12 点判断服务是不是挂了
     schedule.every().day.at("12:00").do(liveJob)
     while True:

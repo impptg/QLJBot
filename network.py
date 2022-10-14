@@ -1,9 +1,10 @@
 import requests
 import config
-import socket
 
+# 校园网地址
 network_addr = "http://10.10.43.3/drcom/login"
 
+# Head
 network_header = {
     'Accept': 'text/javascript, application/javascript, application/ecmascript, application/x-ecmascript, */*; q=0.01',
     'Accept-Encoding': 'gzip, deflate',
@@ -16,6 +17,7 @@ network_header = {
     'X-Requested-With': 'XMLHttpRequest',
 }
 
+# Param
 network_param = {
     'callback': 'dr1665733424916',
     'DDDDD': config.network_user,
@@ -30,6 +32,6 @@ network_param = {
 }
 
 
-if __name__ == '__main__':
-    f = requests.get(network_addr, params=network_param, headers=network_header)
-    print(f)
+def networkConnect():
+    r = requests.get(network_addr, params=network_param, headers=network_header)
+    print(r)
