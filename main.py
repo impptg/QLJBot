@@ -21,7 +21,7 @@ cntPre = 0
 def sendMail():
     try:
         # 连接
-        smtpobj = smtplib.SMTP_SSL(config.mail_server,465)
+        smtpobj = smtplib.SMTP_SSL(config.mail_server, config.mail_port)
         # 登录
         smtpobj.login(config.mail_from, config.mail_pswd)
         # 发送
